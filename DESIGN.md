@@ -100,3 +100,10 @@ Paused when the hero is off screen; frozen under reduced motion (name at wdth 10
 - Caliper bar sits below targets that have a label directly above them (case-page buttons, next project).
 - After a page change the hero ruler is already drawn; only the first visit draws it out from zero.
 - 404 lists the three instruments as ways out.
+
+## Changes after launch (Oct 2026)
+- Hero: Sanskrit gloss and the live px dimension line removed at the owner's request. The name is static at full
+  width (wdth = --name-wmax); it only rises in once. The concept now lives in the caliper hovers and case pages.
+- Archive page (`/archive/`, data in `src/data/archive.ts`): every repo and local project as a parts drawer.
+  Hairline grid, 4 / 2 / 2 columns. Primary hover: the caliper reads the cell and four inspection-red corner
+  marks close in. Local-only projects are muted, shorter cells, not links. Notes only where the repo says what it is.

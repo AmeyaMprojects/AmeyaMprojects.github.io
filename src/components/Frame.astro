@@ -4,6 +4,7 @@ const path = Astro.url.pathname;
 const onHome = path === '/';
 const nav = [
   { label: 'Work', href: '/#work' },
+  { label: 'Archive', href: '/archive/' },
   { label: 'About', href: '/#about' },
   { label: 'Contact', href: '/#contact' },
 ];
@@ -13,7 +14,7 @@ const nav = [
   <nav class="frame__nav" aria-label="Primary">
     <ul>
       {nav.map((n) => (
-        <li><a class="draw" href={n.href} data-title={n.label}>{n.label}</a></li>
+        <li><a class="draw" href={n.href} data-title={n.label} aria-current={path.startsWith(n.href) && n.href.endsWith('/') ? 'page' : undefined}>{n.label}</a></li>
       ))}
     </ul>
   </nav>

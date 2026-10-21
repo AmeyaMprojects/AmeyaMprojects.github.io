@@ -1,0 +1,52 @@
+---
+import Base from '../layouts/Base.astro';
+import { archive, archiveCount, repoUrl } from '../data/archive';
+
+const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+---
+<Base title="Archive" description={`Every project Ameya Mhatre has built or started: ${archiveCount} repositories and local experiments, filed by kind.`}>
+  <section class="wrap case-top archive-top" aria-labelledby="archive-title">
+    <a class="back plink" href="/#work" data-measure data-title="Work"><span class="arr" aria-hidden="true">←</span> Selected work</a>
+    <h1 id="archive-title" class="case-title" data-split="lines" data-intro>Archive</h1>
+    <div class="grid archive__intro" data-reveal="fade" data-intro data-delay="0.3">
+      <p class="case-summary">Everything on the bench. Hackathon builds, agents, coursework and experiments, filed by kind. Most link to source; some never left my laptop.</p>
+      <p class="archive__total mono"><span>{archiveCount}</span> parts</p>
+    </div>
+  </section>
+
+  {archive.map((d) => (
+    <section class="section section--tight wrap archive" aria-labelledby={`d-${slug(d.title)}`}>
+      <div class="section__head">
+        <h2 id={`d-${slug(d.title)}`} class="h3">{d.title}</h2>
+        <p class="section__count mono">{String(d.parts.length).padStart(2, '0')}</p>
+      </div>
+      <ul class="parts" role="list">
+        {d.parts.map((p, i) => {
+          const href = p.case ? `/work/${p.case}/` : p.local ? undefined : repoUrl(p.name);
+          const ext = href && !p.case;
+          const body = (
+            <>
+              <span class="part__name">{p.name}</span>
+              {p.note && <span class="part__note">{p.note}</span>}
+              <span class="part__foot">
+                {p.local ? <span>Local only</span> : <span class="mono"><span class="sr-only">Last updated </span>{p.year}</span>}
+                {p.lang && <span>{p.lang}</span>}
+                {href && <span class="part__go" aria-hidden="true">{p.case ? 'Case →' : 'Source ↗'}</span>}
+              </span>
+            </>
+          );
+          return (
+            <li data-reveal="up" data-delay={((i % 4) * 0.04).toFixed(2)}>
+              {href ? (
+                <a class="part" href={href} data-title={p.name} data-measure
+                   {...(ext ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>{body}</a>
+              ) : (
+                <div class="part part--still">{body}</div>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  ))}
+</Base>

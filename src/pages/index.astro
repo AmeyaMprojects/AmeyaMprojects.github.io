@@ -2,6 +2,7 @@
 import { getImage } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import { site, hero, projects, practice, record, writing } from '../data/site';
+import { archiveCount } from '../data/archive';
 
 const previews = await Promise.all(
   projects.map((p) => getImage({ src: p.cover.src, width: 880, format: 'webp' })),
@@ -66,6 +67,7 @@ const fmtDate = (iso: string) =>
         </li>
       ))}
     </ul>
+    <p class="index__more"><a class="plink" href="/archive/" data-measure data-title="Archive">The full archive, {archiveCount} parts <span class="arr" aria-hidden="true">→</span></a></p>
   </section>
 
   <section id="about" class="section section--airy wrap" aria-labelledby="about-title">
