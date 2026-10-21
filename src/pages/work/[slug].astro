@@ -1,0 +1,81 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import Dim from '../../components/Dim.astro';
+import { projects, site } from '../../data/site';
+
+export function getStaticPaths() {
+  return projects.map((p, i) => ({ params: { slug: p.slug }, props: { i } }));
+}
+const { i } = Astro.props;
+const p = projects[i];
+const next = projects[(i + 1) % projects.length];
+const ld = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareSourceCode',
+  name: p.title,
+  description: p.summary,
+  codeRepository: p.code,
+  programmingLanguage: 'Python',
+  author: { '@type': 'Person', name: site.name, url: site.url },
+};
+const { width: w, height: h } = p.cover.src;
+---
+<Base title={p.title} description={p.summary} jsonLd={ld}>
+  <article class="wrap case-top">
+    <a class="back plink" href="/#work" data-measure data-title="Work"><span class="arr" aria-hidden="true">←</span> All work</a>
+    <h1 class="case-title" data-split="lines" data-intro>{p.title}</h1>
+    <div class="grid">
+      <p class="case-summary">{p.summary}</p>
+    </div>
+    <dl class="grid case-meta" data-reveal="fade" data-intro data-delay="0.3">
+      <div class="wide"><dt>Measures</dt><dd>{p.measures}</dd></div>
+      <div class="wide"><dt>Reading</dt><dd class="mono">{p.reading}, {p.readingLabel}</dd></div>
+      <div class="wide"><dt>Stack</dt><dd>{p.stack.join(', ')}</dd></div>
+      <div class="wide">
+        <dt>Links</dt>
+        <dd class="actions">
+          <a class="btn" href={p.live} target="_blank" rel="noopener noreferrer" data-fill data-measure="below"><span class="btn__fill" aria-hidden="true"></span>Open the live app <span aria-hidden="true">↗</span></a>
+          <a class="btn" href={p.code} target="_blank" rel="noopener noreferrer" data-fill data-measure="below"><span class="btn__fill" aria-hidden="true"></span>Source <span aria-hidden="true">↗</span></a>
+        </dd>
+      </div>
+    </dl>
+
+    <figure class="case-media case-fig" data-reveal="clip" data-intro data-delay="0.35">
+      <Dim value={`${w} px source`} />
+      <div class="case-fig__frame">
+        <Image src={p.cover.src} alt={p.cover.alt} width={1600} widths={[780, 1200, 1600]} sizes="(max-width: 767px) 100vw, 95vw" loading="eager" fetchpriority="high" />
+      </div>
+      <span class="case-fig__side" aria-hidden="true"><span class="mono">{h} px</span></span>
+      <figcaption><span>{p.cover.caption}</span><span class="mono">{w} × {h} px</span></figcaption>
+    </figure>
+
+    <div class="grid case-body">
+      <section class="case-block" aria-labelledby="ctx">
+        <h2 id="ctx">Context</h2>
+        <div><p data-split="lines">{p.context}</p></div>
+      </section>
+      <section class="case-block" aria-labelledby="idea">
+        <h2 id="idea">The idea</h2>
+        <div><p data-split="lines">{p.idea}</p></div>
+      </section>
+      <section class="case-block" aria-labelledby="craft">
+        <h2 id="craft">Details</h2>
+        <div>
+          <ul class="craft">
+            {p.craft.map((c, k) => <li data-reveal="up" data-delay={(k * 0.05).toFixed(2)}>{c}</li>)}
+          </ul>
+        </div>
+      </section>
+      <section class="case-block" aria-labelledby="out">
+        <h2 id="out">What shipped</h2>
+        <div><p data-reveal="up">{p.outcome} <a class="link" href={p.live} target="_blank" rel="noopener noreferrer">Try it</a>.</p></div>
+      </section>
+    </div>
+
+    <nav class="next" aria-label="Next project">
+      <p class="next__label">Next instrument</p>
+      <a class="next__link" href={`/work/${next.slug}/`} data-title={next.title} data-measure="below">{next.title} <span class="arr" aria-hidden="true">→</span></a>
+    </nav>
+  </article>
+</Base>

@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+import Dim from '../components/Dim.astro';
+import { projects } from '../data/site';
+---
+<Base title="Out of range" description="There is nothing at this address to measure. Head back to the work of Ameya Mhatre, software engineer.">
+  <section class="lost wrap">
+    <Dim value="— px" />
+    <h1 class="lost__title" data-reveal="up" data-intro>Out of range</h1>
+    <p>This address reads nothing. Either the page moved, or it never existed.</p>
+    <p><a class="plink" href="/" data-measure data-title="Ameya Mhatre"><span class="arr" aria-hidden="true">←</span> Back to the start</a></p>
+    <ul class="lost__ways" aria-label="Or open an instrument">
+      {projects.map((p) => (
+        <li><a href={`/work/${p.slug}/`} data-title={p.title} data-measure><b>{p.title}</b> <span>{p.measures}</span></a></li>
+      ))}
+    </ul>
+  </section>
+</Base>

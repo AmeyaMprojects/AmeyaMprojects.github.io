@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://ameyamprojects.github.io/sitemap-index.xml

@@ -1,0 +1,20 @@
+---
+import { site } from '../data/site';
+const path = Astro.url.pathname;
+const onHome = path === '/';
+const nav = [
+  { label: 'Work', href: '/#work' },
+  { label: 'About', href: '/#about' },
+  { label: 'Contact', href: '/#contact' },
+];
+---
+<header class="frame">
+  <a class="frame__name draw" href="/" aria-current={onHome ? 'page' : undefined} data-title="Ameya Mhatre">{site.name}</a>
+  <nav class="frame__nav" aria-label="Primary">
+    <ul>
+      {nav.map((n) => (
+        <li><a class="draw" href={n.href} data-title={n.label}>{n.label}</a></li>
+      ))}
+    </ul>
+  </nav>
+</header>

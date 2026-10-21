@@ -1,0 +1,174 @@
+---
+import { getImage } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import { site, hero, projects, practice, record, writing } from '../data/site';
+
+const previews = await Promise.all(
+  projects.map((p) => getImage({ src: p.cover.src, width: 880, format: 'webp' })),
+);
+
+// Time ruler: months from Jan of `from` to Jan of `to + 1`.
+const total = (record.to + 1 - record.from) * 12;
+const idx = (ym: string) => {
+  const [y, m] = ym.split('-').map(Number);
+  return (y - record.from) * 12 + (m - 1);
+};
+const pct = (n: number) => `${((n / total) * 100).toFixed(3)}%`;
+const months = (s: { start: string; end: string }) => idx(s.end) - idx(s.start) + 1;
+const years = Array.from({ length: record.to - record.from + 2 }, (_, i) => record.from + i);
+const now = new Date();
+const nowIdx = (now.getFullYear() - record.from) * 12 + now.getMonth() + now.getDate() / 31;
+const nowLabel = now.toLocaleString('en-GB', { month: 'short', year: 'numeric' });
+const fmtDate = (iso: string) =>
+  new Date(iso).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+---
+<Base>
+  <section class="hero wrap" aria-labelledby="hero-name" data-hero>
+    <div class="hero__measure" data-measure-name>
+      <div class="dim" data-name-dim aria-hidden="true">
+        <span class="dim__line" data-dim-line></span>
+        <span class="dim__tick dim__tick--l"></span>
+        <span class="dim__tick dim__tick--r" data-dim-tick></span>
+        <span class="dim__val" data-dim-val>Measuring</span>
+      </div>
+      <div class="name">
+        <h1 id="hero-name" class="name__word" data-name>{site.first}<span class="sr-only"> Mhatre, software engineer</span></h1>
+      </div>
+      <p class="gloss" data-hero-gloss>
+        <i lang="sa-Latn">{hero.gloss.word}</i>
+        <span class="gloss__pos">({hero.gloss.pos})</span>
+        <span>{hero.gloss.meaning}</span>
+      </p>
+    </div>
+    <div class="grid hero__foot">
+      <p class="hero__lead" data-hero-lead>{hero.lead}</p>
+      <div class="hero__cta" data-hero-meta>
+        <a class="plink" href="#work" data-measure>See the work <span class="arr" aria-hidden="true">↓</span></a>
+        <a class="plink" href={site.resume} download="Ameya-Mhatre-Resume.pdf" data-measure>Résumé, PDF <span class="arr arr--ne" aria-hidden="true">↗</span></a>
+      </div>
+      <p class="hero__meta muted" data-hero-meta>
+        <span>{site.role} in {site.location}</span>
+        <span>B.Tech CS (Data Science), MIT Bengaluru, 2028</span>
+      </p>
+    </div>
+  </section>
+
+  <section id="work" class="section wrap" aria-labelledby="work-title">
+    <div class="section__head">
+      <h2 id="work-title" class="h2" data-split="lines">Work</h2>
+      <p class="section__count mono">{projects.length} instruments</p>
+    </div>
+    <ul class="index" data-index>
+      {projects.map((p, i) => (
+        <li>
+          <a class="index__row" href={`/work/${p.slug}/`} data-preview={previews[i].src}
+             data-preview-cap={`${p.cover.src.width} × ${p.cover.src.height} px`}
+             data-title={p.title} data-measure>
+            <span class="index__thumb" aria-hidden="true">
+              <img src={previews[i].src} alt="" width="880" height={Math.round(880 * p.cover.src.height / p.cover.src.width)} loading="lazy" decoding="async" />
+            </span>
+            <span class="index__title">{p.title}</span>
+            <span class="index__measures"><span class="sr-only">Measures: </span>{p.measures}</span>
+            <span class="index__reading">
+              <b class="mono">{p.reading}</b>
+              <span>{p.readingLabel}</span>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section id="about" class="section section--airy wrap" aria-labelledby="about-title">
+    <h2 id="about-title" class="sr-only">About</h2>
+    <div class="grid">
+      <p class="statement" data-split="lines">{practice.statement}</p>
+    </div>
+    <ul class="grid tolerances">
+      {practice.tolerances.map((t, i) => (
+        <li data-reveal="up" data-delay={(i * 0.06).toFixed(2)}>
+          <h3 class="h3">{t.title}</h3>
+          <p>{t.text}</p>
+        </li>
+      ))}
+    </ul>
+    <dl class="grid skills" data-reveal="fade">
+      {practice.skills.map((s) => (
+        <div>
+          <dt>{s.group}</dt>
+          <dd>{s.items.join(', ')}</dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+
+  <section id="record" class="section section--tight wrap" aria-labelledby="record-title">
+    <div class="section__head">
+      <h2 id="record-title" class="h2" data-split="lines">Record</h2>
+      <p class="section__count mono">{record.from} to {record.to}</p>
+    </div>
+    <div class="ruler" data-ruler>
+      <div class="grid">
+        <div class="rec__track" style="height:auto;margin:0" aria-hidden="true">
+          <div class="ruler__scale">
+            {Array.from({ length: total + 1 }, (_, m) => (
+              m % 3 === 0 && <span class:list={['tick', m % 12 === 0 && 'tick--y']} style={`left:${pct(m)}`}></span>
+            ))}
+            {years.slice(0, -1).map((y, i) => (
+              <span class="lbl mono" style={`left:${pct(i * 12)}`}>{y}</span>
+            ))}
+          </div>
+        </div>
+      </div>
+      <ul class="rec">
+        {record.entries.map((e) => (
+          <li class="grid">
+            <div class="rec__head">
+              <h3 class="h3">{e.title}</h3>
+              <p class="rec__org small">{e.org}</p>
+            </div>
+            <div class="rec__track" aria-hidden="true">
+              <span class="ruler__now" style={`left:${pct(nowIdx)}`}></span>
+              {e.spans.map((s) => (
+                <span class="rec__span" data-span style={`left:${pct(idx(s.start))};width:${pct(months(s))}`}>
+                  <span class="rec__dur mono" style="left:0">{months(s)} mo</span>
+                </span>
+              ))}
+            </div>
+            <p class="rec__dates mono">{e.spans.map((s) => s.label).join('; ')}</p>
+            <ul class="rec__notes small">
+              {e.notes.map((n) => <li>{n}</li>)}
+            </ul>
+          </li>
+        ))}
+      </ul>
+      <p class="xs muted mono" style="margin-top:0.8rem"><span style="color:var(--c-accent)">|</span> now, {nowLabel}</p>
+    </div>
+    <ul class="grid facts">
+      {record.facts.map((f) => (
+        <li>
+          <b>{f.value}{f.unit && <small>{f.unit}</small>}</b>
+          <span>{f.label}</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section id="writing" class="section wrap" aria-labelledby="writing-title">
+    <div class="section__head">
+      <h2 id="writing-title" class="h2" data-split="lines">Writing</h2>
+      <a class="plink small" href={site.socials[2].href} target="_blank" rel="noopener noreferrer" data-measure>All posts on Substack <span class="arr arr--ne" aria-hidden="true">↗</span></a>
+    </div>
+    <ul class="posts">
+      {writing.map((w) => (
+        <li>
+          <a class="post" href={w.url} target="_blank" rel="noopener noreferrer" data-measure>
+            <time class="mono" datetime={w.date}>{fmtDate(w.date)}</time>
+            <span class="post__title"><span>{w.title}</span></span>
+            <span class="post__series">{w.series}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+</Base>

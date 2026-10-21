@@ -1,0 +1,11 @@
+---
+// A static dimension line: ticks at both ends, a reading in the middle.
+interface Props { value: string; class?: string; }
+const { value, class: cls } = Astro.props;
+---
+<div class:list={['dim', cls]} aria-hidden="true">
+  <span class="dim__line"></span>
+  <span class="dim__tick dim__tick--l"></span>
+  <span class="dim__tick dim__tick--r"></span>
+  <span class="dim__val">{value}</span>
+</div>

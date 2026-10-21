@@ -1,0 +1,17 @@
+---
+// First load: a ruler calibrates on the same vellum as the hero, then wipes off it.
+---
+<div id="loader" role="status" aria-label="Loading">
+  <div class="loader__inner">
+    <span data-loader-out>Calibrating</span>
+    <span class="loader__count" data-loader-out data-loader-count>000</span>
+  </div>
+  <div class="loader__scale" aria-hidden="true">
+    <div class="loader__ticks"></div>
+    <div class="loader__bar" data-loader-bar></div>
+  </div>
+</div>
+<script is:inline>
+  // Phones, deep links and repeat visits skip calibration: drop the node so nothing waits on it.
+  if (document.documentElement.classList.contains('no-loader')) document.getElementById('loader')?.remove();
+</script>
