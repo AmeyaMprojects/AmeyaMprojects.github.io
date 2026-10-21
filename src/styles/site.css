@@ -62,7 +62,7 @@ html.no-loader #loader { display: none; }
 .dim__line { position: absolute; left: 0; right: 0; top: 50%; height: 1.5px; background: currentColor; transform-origin: 0 50%; }
 .dim__tick { position: absolute; top: 25%; width: 1px; height: 50%; background: currentColor; }
 .dim__tick--l { left: 0; }
-.dim:not([data-name-dim]) .dim__val { transform: translate(-50%, -50%); }
+.dim__val { transform: translate(-50%, -50%); }
 .dim__tick--r { left: 0; }
 .dim__val {
   position: absolute; left: 50%; top: 50%; padding: 0 0.6em; background: var(--c-bg);
@@ -72,12 +72,9 @@ html.no-loader #loader { display: none; }
 .name__word {
   display: inline-block; white-space: nowrap;
   font-family: var(--f-display); font-weight: 800; line-height: 0.8; letter-spacing: -0.035em;
-  font-size: calc(100cqi / var(--name-em)); font-variation-settings: 'wdth' 100, 'wght' 800;
+  font-size: calc(100cqi / var(--name-em)); font-variation-settings: 'wdth' var(--name-wmax), 'wght' 800;
   margin-left: -0.04em;
 }
-.gloss { margin-top: calc(var(--u) * 1.5); display: flex; gap: 0.6em; align-items: baseline; flex-wrap: wrap; font-size: var(--t-m); line-height: 1.2; letter-spacing: -0.01em; }
-.gloss i { font-style: italic; font-weight: 600; font-synthesis: style; }
-.gloss__pos { color: var(--c-muted); font-size: var(--t-s); }
 .hero__foot { margin-top: calc(var(--u) * 4); row-gap: calc(var(--u) * 2); align-items: end; }
 .hero__lead { grid-column: 7 / span 6; font-size: var(--t-m); line-height: 1.32; letter-spacing: -0.012em; max-width: 34ch; }
 .hero__meta { grid-column: 1 / span 4; display: flex; flex-direction: column; gap: 0.3em; font-size: var(--t-s); }
@@ -297,7 +294,6 @@ html.no-loader #loader { display: none; }
   .hero__lead { grid-column: 1 / -1; grid-row: 1; font-size: 1.125rem; }
   .hero__meta { grid-column: 1 / -1; grid-row: 3; }
   .hero__cta { grid-column: 1 / -1; grid-row: 2; }
-  .gloss { font-size: 1.0625rem; }
   .dim__val { font-size: 0.75rem; }
   .index__row { row-gap: 0.6rem; padding-block: 1.4rem; }
   .index__thumb { grid-column: 1 / -1; margin-bottom: 0.4rem; }

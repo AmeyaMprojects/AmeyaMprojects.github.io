@@ -26,7 +26,6 @@ export const site = {
 };
 
 export const hero = {
-  gloss: { word: 'amēya', pos: 'adj., Sanskrit', meaning: 'that which cannot be measured.' },
   lead:
     'I build software that measures things. Agent pipelines that value IPOs, a model that prices NBA contracts against the cap, a screener that sizes risk before a trade, and audits that hold web apps to NIST CSF and ISO 27001.',
 };
